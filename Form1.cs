@@ -130,7 +130,7 @@ namespace UP___Skaner
         {
             // Connect to the device
             var device = this._deviceInfo.Connect();
-
+            
             // Start the scan
             var item = device.Items[1];
             string wiaFormat = "{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}";
@@ -150,7 +150,7 @@ namespace UP___Skaner
                     break;
             }
             var imageFile = (ImageFile)item.Transfer(wiaFormat);
-
+            
             // Return the imageFile
             return imageFile;
         }
@@ -158,6 +158,17 @@ namespace UP___Skaner
         public override string ToString()
         {
             return this._deviceInfo.Properties["Name"].get_Value();
+        }
+
+        private static void SetScanProperty(WIA.IProperties properties, string propertyType, int propertyValue)
+        {
+            WIA.Property prop = properties.get_Item(propertyType);
+            prop.set_Value(propertyValue);
+        }
+
+        private static void SetScannerSettings(IItem scanner, int dpi, int brightness, int contrast, int color)
+        {
+            SetScanProperty(scanner.Properties, "0", brightness);
         }
     }
 }
