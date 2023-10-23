@@ -119,6 +119,16 @@ namespace UP___Skaner
 
     public class Scanner
     {
+        const string WIA_SCAN_COLOR_MODE = "6146";
+        const string WIA_HORIZONTAL_SCAN_RESOLUTION_DPI = "6147";
+        const string WIA_VERTICAL_SCAN_RESOLUTION_DPI = "6148";
+        //const string WIA_HORIZONTAL_SCAN_START_PIXEL = "6149";
+        //const string WIA_VERTICAL_SCAN_START_PIXEL = "6150";
+        const string WIA_HORIZONTAL_SCAN_SIZE_PIXELS = "6151";
+        const string WIA_VERTICAL_SCAN_SIZE_PIXELS = "6152";
+        const string WIA_SCAN_BRIGHTNESS_PERCENTS = "6154";
+        const string WIA_SCAN_CONTRAST_PERCENTS = "6155";
+
         private readonly DeviceInfo _deviceInfo;
 
         public Scanner(DeviceInfo deviceInfo)
@@ -133,6 +143,8 @@ namespace UP___Skaner
 
             // Start the scan
             var item = device.Items[1];
+
+            // SetScannerSettings
             string wiaFormat = "{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}";
             switch(imageFormat)
             {
@@ -158,6 +170,17 @@ namespace UP___Skaner
         public override string ToString()
         {
             return this._deviceInfo.Properties["Name"].get_Value();
+        }
+
+        private static void SetScanProperty(WIA.IProperties properties, string propertyType, int propertyValue)
+        {
+            WIA.Property prop = properties.get_Item(propertyType);
+            prop.set_Value(propertyValue);
+        }
+
+        private static void SetScannerSettings(IItem scanner, int dpi, int brightness, int contrast, int color)
+        {
+            SetScanProperty(scanner.Properties, WIA_SCAN_BRIGHTNESS_PERCENTS, brightness);
         }
     }
 }
