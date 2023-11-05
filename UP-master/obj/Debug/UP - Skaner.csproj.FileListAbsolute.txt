@@ -1,0 +1,12 @@
+C:\Users\lab\Desktop\UP-master\bin\Debug\UP - Skaner.exe.config
+C:\Users\lab\Desktop\UP-master\bin\Debug\UP - Skaner.exe
+C:\Users\lab\Desktop\UP-master\bin\Debug\UP - Skaner.pdb
+C:\Users\lab\Desktop\UP-master\obj\Debug\UP - Skaner.csprojAssemblyReference.cache
+C:\Users\lab\Desktop\UP-master\obj\Debug\Interop.WIA.dll
+C:\Users\lab\Desktop\UP-master\obj\Debug\UP - Skaner.csproj.ResolveComReference.cache
+C:\Users\lab\Desktop\UP-master\obj\Debug\UP___Skaner.Skaner.resources
+C:\Users\lab\Desktop\UP-master\obj\Debug\UP___Skaner.Properties.Resources.resources
+C:\Users\lab\Desktop\UP-master\obj\Debug\UP - Skaner.csproj.GenerateResource.cache
+C:\Users\lab\Desktop\UP-master\obj\Debug\UP - Skaner.csproj.CoreCompileInputs.cache
+C:\Users\lab\Desktop\UP-master\obj\Debug\UP - Skaner.exe
+C:\Users\lab\Desktop\UP-master\obj\Debug\UP - Skaner.pdb
