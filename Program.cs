@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace UP___Skaner
+namespace UP___Karta
 {
     internal static class Program
     {
@@ -16,7 +16,7 @@ namespace UP___Skaner
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Skaner());
+            Application.Run(new Karta_Dzwiekowa());
         }
     }
 }
