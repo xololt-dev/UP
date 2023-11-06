@@ -18,6 +18,7 @@ using System.Media;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using SharpDX;
+using System.Windows.Forms.VisualStyles;
 
 namespace UP___Karta
 {
@@ -129,7 +130,7 @@ namespace UP___Karta
         // https://www.codeproject.com/Articles/866347/Streaming-Audio-to-the-WaveOut-Device
         
         [DllImport("winmm.dll")]
-        public static extern int waveOutOpen(out IntPtr hWaveOut, int uDeviceID, WaveFormat lpFormat, WaveDelegate dwCallback, IntPtr dwInstance, int dwFlags);
+        public static extern int waveOutOpen(out IntPtr hWaveOut, int uDeviceID, WAVEFORMAT lpFormat, IntPtr dwCallback, int dwInstance, int dwFlags);
         [DllImport("winmm.dll")]
         public static extern int waveOutReset(IntPtr hWaveOut);
         [DllImport("winmm.dll")]
@@ -153,6 +154,18 @@ namespace UP___Karta
             public IntPtr lpNext;                                                       // PWaveHdr, reserved for driver
             public int reserved;                                                        // reserved for driver
         }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WAVEFORMAT
+        {
+            public short wFormatTag;                                                       // pointer to locked data buffer
+            public short nChannels;                                                  // length of data buffer
+            public int nSamplesPerSec;                                                 // used for input only
+            public int nAvgBytesPerSec;                                                       // for client's use
+            public short nBlockAllign;                                                         // assorted flags (see defines)
+            public short wBitsPerSample;                                                         // loop control counter
+            public short cbSize;                                                       // PWaveHdr, reserved for driver
+        }
+
         public delegate void WaveDelegate(IntPtr dev, int uMsg, int dwUser, int dwParam1, int dwParam2);
 
         DirectSound directSound = new DirectSound();
@@ -461,8 +474,27 @@ namespace UP___Karta
                 soundBuffer.CurrentPosition = directCurrentPosition;
                 soundBuffer.Play(0, PlayFlags.None);
             }
+        }
+
+        private void PlayWaveOutWrite()
+        {
+            IntPtr hWaveOut = IntPtr.Zero;
+            IntPtr hWaveHdr = IntPtr.Zero;
+            WAVEFORMAT format = new WAVEFORMAT();
+            format.wFormatTag = 1;
+            format.nChannels = 2;
+            format.nSamplesPerSec = 44100;
+            format.wBitsPerSample = 16;
+            format.nBlockAllign = (short)(format.nChannels * (format.wBitsPerSample / 8));
+            format.nAvgBytesPerSec = format.nSamplesPerSec * format.nBlockAllign;
+            format.cbSize = 0;
             
-            // soundBuffer.Stop();
+            waveOutOpen(out hWaveOut, -1, format, IntPtr.Zero, 0, 0);
+
+            using(FileStream fileStream = new FileStream(filePath, FileMode.Open))
+            {
+               // byte[] buffer = new byte[fileStream.le]
+            }
         }
     }
 }
