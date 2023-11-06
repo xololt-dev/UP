@@ -11,12 +11,13 @@ using System.Runtime.InteropServices;
 using WIA;
 using WMPLib;
 using SharpDX.Multimedia;
-using SharpDX.X3DAudio;
+using SharpDX.DirectSound;
 using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Media;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using SharpDX;
 
 namespace UP___Karta
 {
@@ -27,6 +28,7 @@ namespace UP___Karta
         {
             InitializeComponent();
             comboBoxPlayMethod.SelectedIndex = 0;
+            player.SetDirectCooperative(this.Handle);
         }
 
         private void Skaner_Load(object sender, EventArgs e)
@@ -125,6 +127,7 @@ namespace UP___Karta
         WMPLib.WindowsMediaPlayer PlayerWMP;
 
         // https://www.codeproject.com/Articles/866347/Streaming-Audio-to-the-WaveOut-Device
+        
         [DllImport("winmm.dll")]
         public static extern int waveOutOpen(out IntPtr hWaveOut, int uDeviceID, WaveFormat lpFormat, WaveDelegate dwCallback, IntPtr dwInstance, int dwFlags);
         [DllImport("winmm.dll")]
@@ -138,8 +141,24 @@ namespace UP___Karta
         [DllImport("winmm.dll")]
         public static extern int waveOutClose(IntPtr hWaveOut);
 
-        DirectSound directSound;// = new DirectSound();
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WaveHdr
+        {
+            public IntPtr lpData;                                                       // pointer to locked data buffer
+            public int dwBufferLength;                                                  // length of data buffer
+            public int dwBytesRecorded;                                                 // used for input only
+            public IntPtr dwUser;                                                       // for client's use
+            public int dwFlags;                                                         // assorted flags (see defines)
+            public int dwLoops;                                                         // loop control counter
+            public IntPtr lpNext;                                                       // PWaveHdr, reserved for driver
+            public int reserved;                                                        // reserved for driver
+        }
+        public delegate void WaveDelegate(IntPtr dev, int uMsg, int dwUser, int dwParam1, int dwParam2);
 
+        DirectSound directSound = new DirectSound();
+        SecondarySoundBuffer soundBuffer;
+        private int directCurrentPosition = 0;
+        private bool isPlaying = false;
 
         private string playMethod = "PlaySound",
             filePath = "";
@@ -172,6 +191,7 @@ namespace UP___Karta
                     // playMethod = "MCI";
                     break;
                 case "DirectSound":
+                    PlayDirect();
                     // playMethod = "DirectSound";
                     break;
             }
@@ -194,7 +214,7 @@ namespace UP___Karta
                     StopMCI();
                     break;
                 case "DirectSound":
-                    // playMethod = "DirectSound";
+                    StopDirect();
                     break;
             }
         }
@@ -225,7 +245,7 @@ namespace UP___Karta
                     PauseMCI();
                     break;
                 case "DirectSound":
-                    // playMethod = "DirectSound";
+                    PauseDirect();
                     break;
             }
         }
@@ -359,6 +379,90 @@ namespace UP___Karta
         {
             MessageBox.Show("Cannot play media file.");
             // this.Close();
+        }
+
+        public void SetDirectCooperative(IntPtr handle)
+        {
+            directSound.SetCooperativeLevel(handle, CooperativeLevel.Priority);
+        }
+        private void PlayDirect()
+        { 
+            // Create PrimarySoundBuffer
+            var primaryBufferDesc = new SoundBufferDescription();
+            primaryBufferDesc.Flags = SharpDX.DirectSound.BufferFlags.PrimaryBuffer;
+            primaryBufferDesc.AlgorithmFor3D = Guid.Empty;
+
+            var primarySoundBuffer = new PrimarySoundBuffer(directSound, primaryBufferDesc);
+
+            // Play the PrimarySound Buffer
+            primarySoundBuffer.Play(0, SharpDX.DirectSound.PlayFlags.Looping);
+
+            // Default WaveFormat Stereo 44100 16 bit
+            WaveFormat waveFormat = new WaveFormat();
+
+            var stream = new SoundStream(File.OpenRead(filePath));
+            waveFormat = stream.Format;
+
+            // Create SecondarySoundBuffer
+            var secondaryBufferDesc = new SoundBufferDescription();
+            secondaryBufferDesc.BufferBytes = File.ReadAllBytes(filePath).Length;// waveFormat.ConvertLatencyToByteSize(60000);
+            secondaryBufferDesc.Format = waveFormat;
+            secondaryBufferDesc.Flags = SharpDX.DirectSound.BufferFlags.GetCurrentPosition2 | SharpDX.DirectSound.BufferFlags.ControlPositionNotify | SharpDX.DirectSound.BufferFlags.GlobalFocus |
+                                        SharpDX.DirectSound.BufferFlags.ControlVolume | SharpDX.DirectSound.BufferFlags.StickyFocus;
+            secondaryBufferDesc.AlgorithmFor3D = Guid.Empty;
+            soundBuffer = new SecondarySoundBuffer(directSound, secondaryBufferDesc);
+            soundBuffer.Write(File.ReadAllBytes(filePath), 0, LockFlags.None);
+            /*
+            // Get Capabilties from secondary sound buffer
+            var capabilities = secondarySoundBuffer.Capabilities;
+
+            // Lock the buffer
+            DataStream dataPart2;
+            var dataPart1 = secondarySoundBuffer.Lock(0, capabilities.BufferBytes, LockFlags.EntireBuffer, out dataPart2);
+            
+            // Fill the buffer with some sound
+            int numberOfSamples = capabilities.BufferBytes / waveFormat.BlockAlign;
+            for (int i = 0; i < numberOfSamples; i++)
+            {
+                double vibrato = Math.Cos(2 * Math.PI * 10.0 * i / waveFormat.SampleRate);
+                short value = (short)(Math.Cos(2 * Math.PI * (220.0 + 4.0 * vibrato) * i / waveFormat.SampleRate) * 16384); // Not too loud
+                dataPart1.Write(value);
+                dataPart1.Write(value);
+            }
+
+            // Unlock the buffer
+            secondarySoundBuffer.Unlock(dataPart1, dataPart2);
+          */
+            // Play the song
+            isPlaying = true;
+            soundBuffer.Play(0, PlayFlags.None);
+        }
+
+
+        private void StopDirect()
+        {
+            isPlaying = false;
+            soundBuffer.Stop();
+        }
+
+        private void PauseDirect()
+        {
+            if (isPlaying)
+            {
+                int xdData = 0;
+                soundBuffer.GetCurrentPosition(out directCurrentPosition, out xdData);
+                soundBuffer.Stop();
+                isPlaying = false;
+            }
+            else
+            {
+                isPlaying = true;
+                soundBuffer.Write(File.ReadAllBytes(filePath), 0, LockFlags.None);
+                soundBuffer.CurrentPosition = directCurrentPosition;
+                soundBuffer.Play(0, PlayFlags.None);
+            }
+            
+            // soundBuffer.Stop();
         }
     }
 }
