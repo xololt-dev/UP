@@ -47,7 +47,6 @@ namespace UP___Karta
                       StringBuilder errMsg, int buflen);
 
         // https://learn.microsoft.com/pl-pl/dotnet/csharp/advanced-topics/interop/how-to-use-platform-invoke-to-play-a-wave-file
-        WMPLib.WindowsMediaPlayer Player;
 
         [DllImport("winmm.DLL", EntryPoint = "PlaySound", SetLastError = true, CharSet = CharSet.Unicode, ThrowOnUnmappableChar = true)]
         private static extern bool PlaySound(string szSound, System.IntPtr hMod, PlaySoundFlags flags);
@@ -65,35 +64,46 @@ namespace UP___Karta
             SND_RESOURCE = 0x00040004
         }
 
+        // https://learn.microsoft.com/pl-pl/windows/win32/wmp/creating-the-windows-media-player-control-programmatically
+        WMPLib.WindowsMediaPlayer PlayerWMP;
         private void PlayFile(String url)
         {
-            Player = new WMPLib.WindowsMediaPlayer();
-            Player.PlayStateChange +=
+            PlayerWMP = new WMPLib.WindowsMediaPlayer();
+            PlayerWMP.PlayStateChange +=
                 new WMPLib._WMPOCXEvents_PlayStateChangeEventHandler(Player_PlayStateChange);
-            Player.MediaError +=
+            PlayerWMP.MediaError +=
                 new WMPLib._WMPOCXEvents_MediaErrorEventHandler(Player_MediaError);
-            Player.URL = url;
-            Player.controls.play();
+            PlayerWMP.URL = url;
+            PlayerWMP.controls.play();
         }
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
             // TODO  Insert a valid path in the line below.
-            PlayFile(@"c:\myaudio.wma");
+            PlayFile(filePath);
         }
 
         private void Player_PlayStateChange(int NewState)
         {
+            switch((WMPLib.WMPPlayState)NewState)
+            {
+                case WMPLib.WMPPlayState.wmppsStopped:
+                    break;
+                case WMPLib.WMPPlayState.wmppsPaused:
+                    break;
+            }
+            /*
             if ((WMPLib.WMPPlayState)NewState == WMPLib.WMPPlayState.wmppsStopped)
             {
-                this.Close();
+                // this.Close();
             }
+            */
         }
 
         private void Player_MediaError(object pMediaObject)
         {
             MessageBox.Show("Cannot play media file.");
-            this.Close();
+            // this.Close();
         }
 
         public Karta_Dzwiekowa()
@@ -118,7 +128,8 @@ namespace UP___Karta
                         PlaySound(filePath, new System.IntPtr(), PlaySoundFlags.SND_SYNC);
                         break;
                     case "Windows Media Player":
-                        playMethod = "Windows Media Player";
+                        PlayFile(filePath);
+                        // ?
                         break;
                     case "WaveOutWrite":
                         playMethod = "WaveOutWrite";
@@ -139,10 +150,10 @@ namespace UP___Karta
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
+            filePath = textBox1.Text;
         }
 
-        private void comboBoxImageFormats_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxPlayMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch((string)comboBoxPlayMethod.SelectedItem)
             {
@@ -169,11 +180,11 @@ namespace UP___Karta
 
         }
 
-        private void buttonShowScanners_Click(object sender, EventArgs e)
+        private void btnSelectFile_Click(object sender, EventArgs e)
         {
             var dialog1 = new OpenFileDialog();
 
-            dialog1.Title = "Browse to find sound file to play";
+            dialog1.Title = "Wybierz plik do odtworzenia";
             dialog1.InitialDirectory = @"c:\";
             //<Snippet5>
             dialog1.Filter = "Wav Files (*.wav)|*.wav";
@@ -194,9 +205,10 @@ namespace UP___Karta
             switch(playMethod)
             {
                 case "PlaySound":
-                    // playMethod = "PlaySound";
+                    PlaySound(null, new IntPtr(), PlaySoundFlags.SND_SYNC);
                     break;
                 case "Windows Media Player":
+                    PlayerWMP.controls.pause();
                     // playMethod = "Windows Media Player";
                     break;
                 case "WaveOutWrite":
@@ -216,9 +228,10 @@ namespace UP___Karta
             switch (playMethod)
             {
                 case "PlaySound":
-                    // playMethod = "PlaySound";
+                    PlaySound(null, new IntPtr(), PlaySoundFlags.SND_SYNC);
                     break;
                 case "Windows Media Player":
+                    PlayerWMP.controls.stop();
                     // playMethod = "Windows Media Player";
                     break;
                 case "WaveOutWrite":
@@ -231,6 +244,17 @@ namespace UP___Karta
                     // playMethod = "DirectSound";
                     break;
             }
+        }
+    }
+    public class Player
+    {
+        struct MCI_Data
+        {
+            private StringBuilder msg;  // MCI Error message
+            private StringBuilder returnData;  // MCI return data
+            private int error;
+            private string Pcommand;  // String that holds the MCI command
+            public bool Paused { get; set; }
         }
     }
 

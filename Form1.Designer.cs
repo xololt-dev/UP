@@ -71,7 +71,7 @@
             this.comboBoxPlayMethod.Name = "comboBoxPlayMethod";
             this.comboBoxPlayMethod.Size = new System.Drawing.Size(180, 28);
             this.comboBoxPlayMethod.TabIndex = 4;
-            this.comboBoxPlayMethod.SelectedIndexChanged += new System.EventHandler(this.comboBoxImageFormats_SelectedIndexChanged);
+            this.comboBoxPlayMethod.SelectedIndexChanged += new System.EventHandler(this.comboBoxPlayMethod_SelectedIndexChanged);
             // 
             // Devices
             // 
@@ -92,7 +92,7 @@
             this.btnSelectFile.TabIndex = 6;
             this.btnSelectFile.Text = "Wybierz plik";
             this.btnSelectFile.UseVisualStyleBackColor = true;
-            this.btnSelectFile.Click += new System.EventHandler(this.buttonShowScanners_Click);
+            this.btnSelectFile.Click += new System.EventHandler(this.btnSelectFile_Click);
             // 
             // btnPause
             // 
