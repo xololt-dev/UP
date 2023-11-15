@@ -20,9 +20,7 @@ using System.Windows.Forms.VisualStyles;
 using static UP___Karta.Player;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
-using SharpDX.WIC;
 using static System.Windows.Forms.CheckedListBox;
-using System.Xml.Linq;
 
 namespace UP___Karta
 {
@@ -36,7 +34,7 @@ namespace UP___Karta
             player.SetDirectCooperative(this.Handle);
         }
 
-        private void Skaner_Load(object sender, EventArgs e)
+        private void Karta_Dzwiekowa_Load(object sender, EventArgs e)
         {
 
         }
@@ -70,7 +68,6 @@ namespace UP___Karta
             {
                 textBox1.Text = dialog1.FileName;
                 player.SetFilePath(dialog1.FileName);
-                // PlaySound(dialog1.FileName, new System.IntPtr(), PlaySoundFlags.SND_SYNC);
             }
         }
 
@@ -90,6 +87,20 @@ namespace UP___Karta
             string[] s = new string[a.Count];
             a.CopyTo(s, 0);
             player.SetEqualizerSettings(s);
+        }
+
+        private void buttonRecord_Click(object sender, EventArgs e)
+        {
+            if (player.IsRecording())
+            {
+                player.StopRecord();
+                textBoxRecording.Text = "";
+            }                
+            else
+            {
+                player.Record();
+                textBoxRecording.Text = "Nagrywanie w toku!";
+            }                
         }
     }
 
@@ -184,6 +195,7 @@ namespace UP___Karta
         SecondarySoundBuffer soundBuffer;
         private int directCurrentPosition = 0;
         private bool isPlaying = false;
+        private bool isRecording = false;
         private bool isPaused = false;
 
         private string playMethod = "PlaySound",
@@ -229,6 +241,7 @@ namespace UP___Karta
         }
         public void Stop()
         {
+            isPlaying = false;
             switch (playMethod)
             {
                 case "PlaySound":
@@ -283,6 +296,36 @@ namespace UP___Karta
             }
         }
 
+        public void Record()
+        {
+            isRecording = true;
+
+            mciSendString("open new type waveaudio alias wavfile", null, 0, IntPtr.Zero);
+            mciSendString("record wavfile", null, 0, IntPtr.Zero);
+        }
+
+        public void StopRecord()
+        {
+            if (filePath == "")
+            {
+                filePath = "test.wav";
+                mci_data.Pcommand = "save wavfile test.wav";
+            }
+            else
+            {
+                MessageBox.Show(filePath, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                mci_data.Pcommand = "save wavfile " + filePath + ".wav";
+                filePath += ".wav";
+            }            
+
+            mci_data.error = mciSendString(mci_data.Pcommand, null, 0, IntPtr.Zero);
+            if (mci_data.error != 0)
+            {
+                return;
+            }
+            mciSendString("close wavfile", null, 0, IntPtr.Zero);
+            isRecording = false;
+        }
         public void SetPlayMethod(string playMethod)
         {
             this.playMethod = playMethod;
@@ -291,6 +334,11 @@ namespace UP___Karta
         public void SetFilePath(string filePath)
         {
             this.filePath = filePath;
+        }
+
+        public bool IsRecording()
+        {
+            return isRecording;
         }
 
         public void CloseMCI()
@@ -323,7 +371,7 @@ namespace UP___Karta
 
         public bool PlayMCI()
         {
-            if (OpenMCI(this.filePath))//playlist.Items[track].SubItems[1].Text))
+            if (OpenMCI(this.filePath))
             {
                 mci_data.Pcommand = "play MediaFile";
                 mci_data.error = mciSendString(mci_data.Pcommand, null, 0, IntPtr.Zero);
@@ -356,7 +404,7 @@ namespace UP___Karta
             }
         }
 
-        public void StopMCI()
+        private void StopMCI()
         {
             mci_data.Pcommand = "stop MediaFile";
             mci_data.error = mciSendString(mci_data.Pcommand, null, 0, IntPtr.Zero);
@@ -364,13 +412,13 @@ namespace UP___Karta
             CloseMCI();
         }
 
-        public void ResumeMCI()
+        private void ResumeMCI()
         {
             mci_data.Pcommand = "resume MediaFile";
             mci_data.error = mciSendString(mci_data.Pcommand, null, 0, IntPtr.Zero);
         }
 
-        public bool IsPlayingMCI()
+        private bool IsPlayingMCI()
         {
             mci_data.Pcommand = "status MediaFile mode";
             mci_data.error = mciSendString(mci_data.Pcommand, mci_data.returnData, 128, IntPtr.Zero);

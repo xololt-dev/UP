@@ -35,6 +35,8 @@
             this.btnPause = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.buttonRecord = new System.Windows.Forms.Button();
+            this.textBoxRecording = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnStart
@@ -49,9 +51,9 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(505, 358);
+            this.textBox1.Location = new System.Drawing.Point(219, 388);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.Size = new System.Drawing.Size(441, 20);
             this.textBox1.TabIndex = 3;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -74,7 +76,7 @@
             // 
             this.btnSelectFile.Location = new System.Drawing.Point(505, 255);
             this.btnSelectFile.Name = "btnSelectFile";
-            this.btnSelectFile.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectFile.Size = new System.Drawing.Size(75, 41);
             this.btnSelectFile.TabIndex = 6;
             this.btnSelectFile.Text = "Wybierz plik";
             this.btnSelectFile.UseVisualStyleBackColor = true;
@@ -113,17 +115,41 @@
             "Echo",
             "Param EQ",
             "Distortion"});
-            this.checkedListBox1.Location = new System.Drawing.Point(277, 36);
+            this.checkedListBox1.Location = new System.Drawing.Point(12, 12);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(120, 139);
             this.checkedListBox1.TabIndex = 19;
             this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
+            // 
+            // buttonRecord
+            // 
+            this.buttonRecord.Location = new System.Drawing.Point(587, 255);
+            this.buttonRecord.Name = "buttonRecord";
+            this.buttonRecord.Size = new System.Drawing.Size(153, 41);
+            this.buttonRecord.TabIndex = 20;
+            this.buttonRecord.Text = "Nagrywaj";
+            this.buttonRecord.UseVisualStyleBackColor = true;
+            this.buttonRecord.Click += new System.EventHandler(this.buttonRecord_Click);
+            // 
+            // textBoxRecording
+            // 
+            this.textBoxRecording.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxRecording.Enabled = false;
+            this.textBoxRecording.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.textBoxRecording.ForeColor = System.Drawing.Color.LightGreen;
+            this.textBoxRecording.Location = new System.Drawing.Point(219, 313);
+            this.textBoxRecording.Name = "textBoxRecording";
+            this.textBoxRecording.ReadOnly = true;
+            this.textBoxRecording.Size = new System.Drawing.Size(521, 37);
+            this.textBoxRecording.TabIndex = 21;
             // 
             // Karta_Dzwiekowa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textBoxRecording);
+            this.Controls.Add(this.buttonRecord);
             this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnPause);
@@ -133,7 +159,7 @@
             this.Controls.Add(this.btnStart);
             this.Name = "Karta_Dzwiekowa";
             this.Text = "Karta Dzwiekowa";
-            this.Load += new System.EventHandler(this.Skaner_Load);
+            this.Load += new System.EventHandler(this.Karta_Dzwiekowa_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -148,6 +174,8 @@
         private System.Windows.Forms.Button btnPause;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.Button buttonRecord;
+        private System.Windows.Forms.TextBox textBoxRecording;
     }
 }
 
