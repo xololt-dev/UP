@@ -1,6 +1,6 @@
-﻿namespace UP___Karta
+﻿namespace UP___Kamera
 {
-    partial class Karta_Dzwiekowa
+    partial class Kamera
     {
         /// <summary>
         /// Wymagana zmienna projektanta.
@@ -159,7 +159,7 @@
             this.Controls.Add(this.btnStart);
             this.Name = "Karta_Dzwiekowa";
             this.Text = "Karta Dzwiekowa";
-            this.Load += new System.EventHandler(this.Karta_Dzwiekowa_Load);
+            this.Load += new System.EventHandler(this.Kamera_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

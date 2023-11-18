@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UP___Karta.Properties {
+namespace UP___Kamera.Properties {
     using System;
     
     

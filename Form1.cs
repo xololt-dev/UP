@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Windows.Media.Capture;
+using Windows.Storage;
 using WMPLib;
 using SharpDX.Multimedia;
 using SharpDX.DirectSound;
@@ -17,24 +19,24 @@ using System.Media;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Windows.Forms.VisualStyles;
-using static UP___Karta.Player;
+using static UP___Kamera.Player;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using static System.Windows.Forms.CheckedListBox;
 
-namespace UP___Karta
+namespace UP___Kamera
 {
-    public partial class Karta_Dzwiekowa : Form
+    public partial class Kamera : Form
     {
         private Player player = new Player();
-        public Karta_Dzwiekowa()
+        public Kamera()
         {
             InitializeComponent();
             comboBoxPlayMethod.SelectedIndex = 0;
             player.SetDirectCooperative(this.Handle);
         }
 
-        private void Karta_Dzwiekowa_Load(object sender, EventArgs e)
+        private void Kamera_Load(object sender, EventArgs e)
         {
 
         }

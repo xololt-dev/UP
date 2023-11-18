@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace UP___Karta
+namespace UP___Kamera
 {
     internal static class Program
     {
@@ -16,7 +16,7 @@ namespace UP___Karta
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Karta_Dzwiekowa());
+            Application.Run(new Kamera());
         }
     }
 }
