@@ -148,7 +148,8 @@ namespace UP___Karta
         // https://www.codeproject.com/Articles/866347/Streaming-Audio-to-the-WaveOut-Device
         
         [DllImport("winmm.dll")]
-        public static extern int waveOutOpen(out IntPtr hWaveOut, int uDeviceID, ref WAVEFORMAT lpFormat, IntPtr dwCallback, IntPtr dwInstance, int dwFlags);
+        public static extern int waveOutOpen(out IntPtr hWaveOut, int uDeviceID, ref WAVEFORMAT lpFormat, IntPtr dwCallback, 
+            IntPtr dwInstance, int dwFlags);
         [DllImport("winmm.dll")]
         public static extern int waveOutReset(IntPtr hWaveOut);
         [DllImport("winmm.dll")]
@@ -184,10 +185,11 @@ namespace UP___Karta
             public short cbSize;                                                       // PWaveHdr, reserved for driver
         }
 
+        /*
         public const int CALLBACK_FUNCTION = 0x00030000;                                // flag used if we require a callback when audio frames are completed
         public const int CALLBACK_NULL = 0x00000000;                                    // flag used if no callback is required
         public const int BUFFER_DONE = 0x3BD;
-
+        */
         public delegate void WaveDelegate(IntPtr dev, int uMsg, int dwUser, int dwParam1, int dwParam2);
         private WaveDelegate woDone = new WaveDelegate(WaveOutDone);
 
@@ -220,7 +222,7 @@ namespace UP___Karta
             switch (playMethod)
             {
                 case "PlaySound":
-                    PlaySound(filePath, new IntPtr(), PlaySoundFlags.SND_SYNC);
+                    PlaySound(filePath, new IntPtr(), PlaySoundFlags.SND_ASYNC);
                     break;
                 case "Windows Media Player":
                     PlayWMP(filePath);
@@ -245,7 +247,7 @@ namespace UP___Karta
             switch (playMethod)
             {
                 case "PlaySound":
-                    PlaySound(null, new IntPtr(), PlaySoundFlags.SND_SYNC);
+                    PlaySound(null, new IntPtr(), PlaySoundFlags.SND_ASYNC);
                     break;
                 case "Windows Media Player":
                     if (PlayerWMP == null) return;
@@ -349,14 +351,14 @@ namespace UP___Karta
         public bool OpenMCI(string sFileName)
         {
             CloseMCI();
-            // Try to open as mpegvideo 
+            // otwórz jako mpeg
             mci_data.Pcommand = "open \"" + sFileName +
                        "\" type mpegvideo alias MediaFile";
             mci_data.error = mciSendString(mci_data.Pcommand, null, 0, IntPtr.Zero);
             // nie otworzyło
             if (mci_data.error != 0)
             {
-                // Let MCI deside which file type the song is
+                // bez definicji typu
                 mci_data.Pcommand = "open \"" + sFileName +
                            "\" alias MediaFile";
                 mci_data.error = mciSendString(mci_data.Pcommand, null, 0, IntPtr.Zero);
@@ -523,17 +525,18 @@ namespace UP___Karta
             var stream = new SoundStream(File.OpenRead(filePath));
             waveFormat = stream.Format;
 
-            // Create PrimarySoundBuffer
+            // Stworz buffer
             var primaryBufferDesc = new SoundBufferDescription();
-            primaryBufferDesc.BufferBytes = File.ReadAllBytes(filePath).Length;// waveFormat.ConvertLatencyToByteSize(60000);
+            primaryBufferDesc.BufferBytes = File.ReadAllBytes(filePath).Length;
             primaryBufferDesc.Format = waveFormat;
-            primaryBufferDesc.Flags = SharpDX.DirectSound.BufferFlags.GetCurrentPosition2 | SharpDX.DirectSound.BufferFlags.ControlPositionNotify | SharpDX.DirectSound.BufferFlags.GlobalFocus |
-                                        SharpDX.DirectSound.BufferFlags.ControlVolume | SharpDX.DirectSound.BufferFlags.StickyFocus | SharpDX.DirectSound.BufferFlags.ControlEffects;
+            primaryBufferDesc.Flags = SharpDX.DirectSound.BufferFlags.GetCurrentPosition2 | SharpDX.DirectSound.BufferFlags.ControlPositionNotify | 
+                                        SharpDX.DirectSound.BufferFlags.GlobalFocus | SharpDX.DirectSound.BufferFlags.ControlVolume | 
+                                        SharpDX.DirectSound.BufferFlags.StickyFocus | SharpDX.DirectSound.BufferFlags.ControlEffects;
             primaryBufferDesc.AlgorithmFor3D = Guid.Empty;
             soundBuffer = new SecondarySoundBuffer(directSound, primaryBufferDesc);
             soundBuffer.Write(File.ReadAllBytes(filePath), 0, LockFlags.None);
 
-            // Play the song
+            // Sprawdz czy wlaczone sa efekty
             if (eq.Length > 0)
                 soundBuffer.SetEffect(eq);
             soundBuffer.Play(0, PlayFlags.None);
