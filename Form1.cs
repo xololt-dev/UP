@@ -477,6 +477,12 @@ namespace UP___Karta
         public static readonly Guid StandardDistortion = new Guid("ef114c90-cd1d-484e-96e5-09cfaf912a21");
         public void SetEqualizerSettings(string[] effectsType)
         {
+            if (effectsType.Length == 0)
+            {
+                eq = null;
+                return;
+            }
+
             Guid[] outputGuid = new Guid[effectsType.Length];
 
             for (int i = 0; i < effectsType.Length; i++) 
@@ -537,8 +543,11 @@ namespace UP___Karta
             soundBuffer.Write(File.ReadAllBytes(filePath), 0, LockFlags.None);
 
             // Sprawdz czy wlaczone sa efekty
-            if (eq.Length > 0)
-                soundBuffer.SetEffect(eq);
+            if (eq != null)
+            {
+               if (eq.Length > 0)
+                    soundBuffer.SetEffect(eq);
+            }
             soundBuffer.Play(0, PlayFlags.None);
         }
 
