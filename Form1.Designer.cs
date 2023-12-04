@@ -1,6 +1,6 @@
-﻿namespace UP___Karta
+﻿namespace UP___Modem
 {
-    partial class Karta_Dzwiekowa
+    partial class Modem
     {
         /// <summary>
         /// Wymagana zmienna projektanta.
@@ -28,108 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnStart = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.comboBoxPlayMethod = new System.Windows.Forms.ComboBox();
-            this.btnSelectFile = new System.Windows.Forms.Button();
-            this.btnPause = new System.Windows.Forms.Button();
-            this.btnStop = new System.Windows.Forms.Button();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-            this.buttonRecord = new System.Windows.Forms.Button();
             this.textBoxRecording = new System.Windows.Forms.TextBox();
+            this.comboBoxPort = new System.Windows.Forms.ComboBox();
+            this.comboBoxBaud = new System.Windows.Forms.ComboBox();
+            this.comboBoxDataBits = new System.Windows.Forms.ComboBox();
+            this.comboBoxStopBits = new System.Windows.Forms.ComboBox();
+            this.comboBoxHandshake = new System.Windows.Forms.ComboBox();
+            this.comboBoxParzystosc = new System.Windows.Forms.ComboBox();
+            this.buttonPorty = new System.Windows.Forms.Button();
+            this.buttonOpen = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // btnStart
-            // 
-            this.btnStart.Location = new System.Drawing.Point(505, 207);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(75, 41);
-            this.btnStart.TabIndex = 0;
-            this.btnStart.Text = "Start";
-            this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(219, 388);
+            this.textBox1.Location = new System.Drawing.Point(60, 385);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(441, 20);
             this.textBox1.TabIndex = 3;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // comboBoxPlayMethod
-            // 
-            this.comboBoxPlayMethod.FormattingEnabled = true;
-            this.comboBoxPlayMethod.Items.AddRange(new object[] {
-            "PlaySound",
-            "Windows Media Player",
-            "WaveOutWrite",
-            "MCI",
-            "DirectSound"});
-            this.comboBoxPlayMethod.Location = new System.Drawing.Point(458, 121);
-            this.comboBoxPlayMethod.Name = "comboBoxPlayMethod";
-            this.comboBoxPlayMethod.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxPlayMethod.TabIndex = 4;
-            this.comboBoxPlayMethod.SelectedIndexChanged += new System.EventHandler(this.comboBoxPlayMethod_SelectedIndexChanged);
-            // 
-            // btnSelectFile
-            // 
-            this.btnSelectFile.Location = new System.Drawing.Point(505, 255);
-            this.btnSelectFile.Name = "btnSelectFile";
-            this.btnSelectFile.Size = new System.Drawing.Size(75, 41);
-            this.btnSelectFile.TabIndex = 6;
-            this.btnSelectFile.Text = "Wybierz plik";
-            this.btnSelectFile.UseVisualStyleBackColor = true;
-            this.btnSelectFile.Click += new System.EventHandler(this.btnSelectFile_Click);
-            // 
-            // btnPause
-            // 
-            this.btnPause.Location = new System.Drawing.Point(585, 207);
-            this.btnPause.Name = "btnPause";
-            this.btnPause.Size = new System.Drawing.Size(75, 41);
-            this.btnPause.TabIndex = 7;
-            this.btnPause.Text = "Pause";
-            this.btnPause.UseVisualStyleBackColor = true;
-            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
-            // 
-            // btnStop
-            // 
-            this.btnStop.Location = new System.Drawing.Point(665, 207);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(75, 41);
-            this.btnStop.TabIndex = 8;
-            this.btnStop.Text = "Stop";
-            this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
-            // 
-            // checkedListBox1
-            // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
-            "Flanger",
-            "Chorus",
-            "Compressor",
-            "I3DL2 Reverb",
-            "Waves Reverb",
-            "Gargle",
-            "Echo",
-            "Param EQ",
-            "Distortion"});
-            this.checkedListBox1.Location = new System.Drawing.Point(12, 12);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(120, 139);
-            this.checkedListBox1.TabIndex = 19;
-            this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
-            // 
-            // buttonRecord
-            // 
-            this.buttonRecord.Location = new System.Drawing.Point(587, 255);
-            this.buttonRecord.Name = "buttonRecord";
-            this.buttonRecord.Size = new System.Drawing.Size(153, 41);
-            this.buttonRecord.TabIndex = 20;
-            this.buttonRecord.Text = "Nagrywaj";
-            this.buttonRecord.UseVisualStyleBackColor = true;
-            this.buttonRecord.Click += new System.EventHandler(this.buttonRecord_Click);
             // 
             // textBoxRecording
             // 
@@ -143,22 +60,91 @@
             this.textBoxRecording.Size = new System.Drawing.Size(521, 37);
             this.textBoxRecording.TabIndex = 21;
             // 
-            // Karta_Dzwiekowa
+            // comboBoxPort
+            // 
+            this.comboBoxPort.FormattingEnabled = true;
+            this.comboBoxPort.Location = new System.Drawing.Point(60, 25);
+            this.comboBoxPort.Name = "comboBoxPort";
+            this.comboBoxPort.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxPort.TabIndex = 22;
+            // 
+            // comboBoxBaud
+            // 
+            this.comboBoxBaud.FormattingEnabled = true;
+            this.comboBoxBaud.Location = new System.Drawing.Point(60, 52);
+            this.comboBoxBaud.Name = "comboBoxBaud";
+            this.comboBoxBaud.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxBaud.TabIndex = 23;
+            // 
+            // comboBoxDataBits
+            // 
+            this.comboBoxDataBits.FormattingEnabled = true;
+            this.comboBoxDataBits.Location = new System.Drawing.Point(60, 79);
+            this.comboBoxDataBits.Name = "comboBoxDataBits";
+            this.comboBoxDataBits.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxDataBits.TabIndex = 24;
+            // 
+            // comboBoxStopBits
+            // 
+            this.comboBoxStopBits.FormattingEnabled = true;
+            this.comboBoxStopBits.Location = new System.Drawing.Point(60, 106);
+            this.comboBoxStopBits.Name = "comboBoxStopBits";
+            this.comboBoxStopBits.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxStopBits.TabIndex = 25;
+            // 
+            // comboBoxHandshake
+            // 
+            this.comboBoxHandshake.FormattingEnabled = true;
+            this.comboBoxHandshake.Location = new System.Drawing.Point(60, 133);
+            this.comboBoxHandshake.Name = "comboBoxHandshake";
+            this.comboBoxHandshake.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxHandshake.TabIndex = 26;
+            // 
+            // comboBoxParzystosc
+            // 
+            this.comboBoxParzystosc.FormattingEnabled = true;
+            this.comboBoxParzystosc.Location = new System.Drawing.Point(60, 160);
+            this.comboBoxParzystosc.Name = "comboBoxParzystosc";
+            this.comboBoxParzystosc.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxParzystosc.TabIndex = 27;
+            // 
+            // buttonPorty
+            // 
+            this.buttonPorty.Location = new System.Drawing.Point(221, 23);
+            this.buttonPorty.Name = "buttonPorty";
+            this.buttonPorty.Size = new System.Drawing.Size(75, 23);
+            this.buttonPorty.TabIndex = 28;
+            this.buttonPorty.Text = "Znajdź porty";
+            this.buttonPorty.UseVisualStyleBackColor = true;
+            this.buttonPorty.Click += new System.EventHandler(this.buttonPorty_Click);
+            // 
+            // buttonOpen
+            // 
+            this.buttonOpen.Location = new System.Drawing.Point(221, 52);
+            this.buttonOpen.Name = "buttonOpen";
+            this.buttonOpen.Size = new System.Drawing.Size(75, 23);
+            this.buttonOpen.TabIndex = 29;
+            this.buttonOpen.Text = "Otwarty";
+            this.buttonOpen.UseVisualStyleBackColor = true;
+            this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
+            // 
+            // Modem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(556, 450);
+            this.Controls.Add(this.buttonOpen);
+            this.Controls.Add(this.buttonPorty);
+            this.Controls.Add(this.comboBoxParzystosc);
+            this.Controls.Add(this.comboBoxHandshake);
+            this.Controls.Add(this.comboBoxStopBits);
+            this.Controls.Add(this.comboBoxDataBits);
+            this.Controls.Add(this.comboBoxBaud);
+            this.Controls.Add(this.comboBoxPort);
             this.Controls.Add(this.textBoxRecording);
-            this.Controls.Add(this.buttonRecord);
-            this.Controls.Add(this.checkedListBox1);
-            this.Controls.Add(this.btnStop);
-            this.Controls.Add(this.btnPause);
-            this.Controls.Add(this.btnSelectFile);
-            this.Controls.Add(this.comboBoxPlayMethod);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.btnStart);
-            this.Name = "Karta_Dzwiekowa";
-            this.Text = "Karta Dzwiekowa";
+            this.Name = "Modem";
+            this.Text = "Modem";
             this.Load += new System.EventHandler(this.Karta_Dzwiekowa_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -166,16 +152,16 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.ComboBox comboBoxPlayMethod;
-        private System.Windows.Forms.Button btnSelectFile;
-        private System.Windows.Forms.Button btnPause;
-        private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
-        private System.Windows.Forms.Button buttonRecord;
         private System.Windows.Forms.TextBox textBoxRecording;
+        private System.Windows.Forms.ComboBox comboBoxPort;
+        private System.Windows.Forms.ComboBox comboBoxBaud;
+        private System.Windows.Forms.ComboBox comboBoxDataBits;
+        private System.Windows.Forms.ComboBox comboBoxStopBits;
+        private System.Windows.Forms.ComboBox comboBoxHandshake;
+        private System.Windows.Forms.ComboBox comboBoxParzystosc;
+        private System.Windows.Forms.Button buttonPorty;
+        private System.Windows.Forms.Button buttonOpen;
     }
 }
 
