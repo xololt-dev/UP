@@ -22,10 +22,12 @@ using System.IO.Ports;
 
 namespace UP___Modem
 {
+    // https://github.com/emancipatedMind/XmodemProtocol
+
     public partial class Modem : Form
     {
-        SerialPort SerialPort = new SerialPort();
-        XModemProtocol.XModemCommunicator xmodem = new XModemProtocol.XModemCommunicator();
+        SerialPort serialPort = new SerialPort();
+        XModemCommunicator xmodem = new XModemCommunicator();
         public Modem()
         {
             InitializeComponent();
@@ -33,17 +35,104 @@ namespace UP___Modem
 
         private void Karta_Dzwiekowa_Load(object sender, EventArgs e)
         {
-
+            findPorts();
+            addBaudValues();
+            addDataBits();
+            addStopBits();
+            addHandshakeValues();
+            addParzytosc();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void addBaudValues()
+        {
+            comboBoxBaud.Items.Clear();
+
+            comboBoxBaud.Items.Add(300);
+            comboBoxBaud.Items.Add(600);
+            comboBoxBaud.Items.Add(1200);
+            comboBoxBaud.Items.Add(2400);
+            comboBoxBaud.Items.Add(9600);
+            comboBoxBaud.Items.Add(14400);
+            comboBoxBaud.Items.Add(19200);
+            comboBoxBaud.Items.Add(38400);
+            comboBoxBaud.Items.Add(57600);
+            comboBoxBaud.Items.Add(115200);
+            comboBoxBaud.Items.Add(230400);
+            comboBoxBaud.Items.Add(460800);
+            comboBoxBaud.Items.Add(921600);
+            comboBoxBaud.Items.ToString();
+
+            //get first item print in text
+            comboBoxBaud.Text = comboBoxBaud.Items[0].ToString();
+        }
+
+        private void addHandshakeValues()
+        {
+            comboBoxHandshake.Items.Clear();
+
+            comboBoxHandshake.Items.Add("None");
+            comboBoxHandshake.Items.Add("XOnXOff");
+            comboBoxHandshake.Items.Add("RequestToSend");
+            comboBoxHandshake.Items.Add("RequestToSendXOnXOff");
+
+            comboBoxHandshake.Text = comboBoxHandshake.Items[0].ToString();
+        }
+
+        private void addDataBits()
+        {
+            comboBoxDataBits.Items.Clear();
+
+            if (buttonCommsType.Text == "RS232") 
+                comboBoxDataBits.Items.Add(7);
+            comboBoxDataBits.Items.Add(8);
+
+            comboBoxDataBits.Text = comboBoxDataBits.Items[0].ToString();
+        }
+
+        private void addStopBits()
+        {
+            comboBoxStopBits.Items.Clear();
+
+            comboBoxStopBits.Items.Add("One");
+            comboBoxStopBits.Items.Add("OnePointFive");
+            comboBoxStopBits.Items.Add("Two");
+
+            comboBoxStopBits.Text = comboBoxStopBits.Items[0].ToString();
+        }
+
+        private void addParzytosc()
+        {
+            comboBoxParzystosc.Items.Clear();
+
+            comboBoxParzystosc.Items.Add("None");
+            comboBoxParzystosc.Items.Add("Even");
+            comboBoxParzystosc.Items.Add("Mark");
+            comboBoxParzystosc.Items.Add("Odd");
+            comboBoxParzystosc.Items.Add("Space");
+
+            comboBoxParzystosc.Text = comboBoxParzystosc.Items[0].ToString();
+        }
+
+        private void textBoxHistory_TextChanged(object sender, EventArgs e)
         {
             
         }
 
+        private void buttonCommsType_Click(object sender, EventArgs e)
+        {
+            if (buttonCommsType.Text == "RS232")
+            {
+                buttonCommsType.Text = "XMODEM";
+            }
+            else if (buttonCommsType.Text == "XMODEM")
+            {
+                buttonCommsType.Text = "RS232";
+            }
+        }
+
         private void buttonPorty_Click(object sender, EventArgs e)
         {
-            if(!findPorty())
+            if (!findPorts())
             {
                 MessageBox.Show("Komputer nie ma portów!", "Brak portów", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -51,26 +140,23 @@ namespace UP___Modem
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            if (buttonOpen.Text == "Zamknięty" && comboBoxPort.Text.ToString() != "")
+            if (buttonOpen.Text == "Zamknięty")
             {
-                buttonOpen.Text = "Otwarty";
-                SerialPort.PortName = comboBoxPort.Text.ToString();
-                SerialPort.BaudRate = Convert.ToInt32(comboBoxBaud.Text);
-                SerialPort.DataBits = Convert.ToInt16(comboBoxDataBits.Text);
-                SerialPort.StopBits = (StopBits)Enum.Parse(typeof(StopBits), comboBoxStopBits.Text);
-                SerialPort.Handshake =
-                   (Handshake)Enum.Parse(typeof(Handshake), comboBoxHandshake.Text);
-                SerialPort.Parity = (Parity)Enum.Parse(typeof(Parity), comboBoxParzystosc.Text);
-                SerialPort.Open();
+                if (setPortProperties())
+                {
+                    buttonOpen.Text = "Otwarty";
+                    xmodem.Port = serialPort;
+                    serialPort.Open();
+                }
             }
             else if (buttonOpen.Text == "Otwarty")
             {
                 buttonOpen.Text = "Zamknięty";
-                SerialPort.Close();
+                serialPort.Close();
             }
         }
 
-        private bool findPorty()
+        private bool findPorts()
         {
             bool found = false;
             string[] ArrayComPortsNames = null;
@@ -94,6 +180,21 @@ namespace UP___Modem
             }
 
             return found;
+        }
+
+        private bool setPortProperties()
+        {
+            if (comboBoxPort.Text.ToString() == "") return false;
+
+            serialPort.PortName = comboBoxPort.Text.ToString();
+            serialPort.BaudRate = Convert.ToInt32(comboBoxBaud.Text);
+            serialPort.DataBits = Convert.ToInt16(comboBoxDataBits.Text);
+            serialPort.StopBits = (StopBits)Enum.Parse(typeof(StopBits), comboBoxStopBits.Text);
+            serialPort.Handshake =
+               (Handshake)Enum.Parse(typeof(Handshake), comboBoxHandshake.Text);
+            serialPort.Parity = (Parity)Enum.Parse(typeof(Parity), comboBoxParzystosc.Text);
+
+            return true;
         }
     }
 }
