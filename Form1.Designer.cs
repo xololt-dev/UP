@@ -43,66 +43,74 @@
             // 
             // textBoxHistory
             // 
-            this.textBoxHistory.Location = new System.Drawing.Point(60, 238);
+            this.textBoxHistory.Location = new System.Drawing.Point(90, 366);
+            this.textBoxHistory.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxHistory.Multiline = true;
             this.textBoxHistory.Name = "textBoxHistory";
-            this.textBoxHistory.Size = new System.Drawing.Size(441, 200);
+            this.textBoxHistory.Size = new System.Drawing.Size(660, 306);
             this.textBoxHistory.TabIndex = 3;
             this.textBoxHistory.TextChanged += new System.EventHandler(this.textBoxHistory_TextChanged);
             // 
             // comboBoxPort
             // 
             this.comboBoxPort.FormattingEnabled = true;
-            this.comboBoxPort.Location = new System.Drawing.Point(60, 25);
+            this.comboBoxPort.Location = new System.Drawing.Point(90, 38);
+            this.comboBoxPort.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBoxPort.Name = "comboBoxPort";
-            this.comboBoxPort.Size = new System.Drawing.Size(155, 21);
+            this.comboBoxPort.Size = new System.Drawing.Size(230, 28);
             this.comboBoxPort.TabIndex = 22;
             // 
             // comboBoxBaud
             // 
             this.comboBoxBaud.FormattingEnabled = true;
-            this.comboBoxBaud.Location = new System.Drawing.Point(60, 52);
+            this.comboBoxBaud.Location = new System.Drawing.Point(90, 80);
+            this.comboBoxBaud.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBoxBaud.Name = "comboBoxBaud";
-            this.comboBoxBaud.Size = new System.Drawing.Size(155, 21);
+            this.comboBoxBaud.Size = new System.Drawing.Size(230, 28);
             this.comboBoxBaud.TabIndex = 23;
             // 
             // comboBoxDataBits
             // 
             this.comboBoxDataBits.FormattingEnabled = true;
-            this.comboBoxDataBits.Location = new System.Drawing.Point(60, 79);
+            this.comboBoxDataBits.Location = new System.Drawing.Point(90, 122);
+            this.comboBoxDataBits.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBoxDataBits.Name = "comboBoxDataBits";
-            this.comboBoxDataBits.Size = new System.Drawing.Size(155, 21);
+            this.comboBoxDataBits.Size = new System.Drawing.Size(230, 28);
             this.comboBoxDataBits.TabIndex = 24;
             // 
             // comboBoxStopBits
             // 
             this.comboBoxStopBits.FormattingEnabled = true;
-            this.comboBoxStopBits.Location = new System.Drawing.Point(60, 106);
+            this.comboBoxStopBits.Location = new System.Drawing.Point(90, 163);
+            this.comboBoxStopBits.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBoxStopBits.Name = "comboBoxStopBits";
-            this.comboBoxStopBits.Size = new System.Drawing.Size(155, 21);
+            this.comboBoxStopBits.Size = new System.Drawing.Size(230, 28);
             this.comboBoxStopBits.TabIndex = 25;
             // 
             // comboBoxHandshake
             // 
             this.comboBoxHandshake.FormattingEnabled = true;
-            this.comboBoxHandshake.Location = new System.Drawing.Point(60, 133);
+            this.comboBoxHandshake.Location = new System.Drawing.Point(90, 205);
+            this.comboBoxHandshake.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBoxHandshake.Name = "comboBoxHandshake";
-            this.comboBoxHandshake.Size = new System.Drawing.Size(155, 21);
+            this.comboBoxHandshake.Size = new System.Drawing.Size(230, 28);
             this.comboBoxHandshake.TabIndex = 26;
             // 
             // comboBoxParzystosc
             // 
             this.comboBoxParzystosc.FormattingEnabled = true;
-            this.comboBoxParzystosc.Location = new System.Drawing.Point(60, 160);
+            this.comboBoxParzystosc.Location = new System.Drawing.Point(90, 246);
+            this.comboBoxParzystosc.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBoxParzystosc.Name = "comboBoxParzystosc";
-            this.comboBoxParzystosc.Size = new System.Drawing.Size(155, 21);
+            this.comboBoxParzystosc.Size = new System.Drawing.Size(230, 28);
             this.comboBoxParzystosc.TabIndex = 27;
             // 
             // buttonPorty
             // 
-            this.buttonPorty.Location = new System.Drawing.Point(221, 23);
+            this.buttonPorty.Location = new System.Drawing.Point(332, 35);
+            this.buttonPorty.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonPorty.Name = "buttonPorty";
-            this.buttonPorty.Size = new System.Drawing.Size(75, 23);
+            this.buttonPorty.Size = new System.Drawing.Size(112, 35);
             this.buttonPorty.TabIndex = 28;
             this.buttonPorty.Text = "Znajdź porty";
             this.buttonPorty.UseVisualStyleBackColor = true;
@@ -110,26 +118,30 @@
             // 
             // buttonOpen
             // 
-            this.buttonOpen.Location = new System.Drawing.Point(221, 52);
+            this.buttonOpen.Location = new System.Drawing.Point(332, 80);
+            this.buttonOpen.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(75, 23);
+            this.buttonOpen.Size = new System.Drawing.Size(112, 35);
             this.buttonOpen.TabIndex = 29;
-            this.buttonOpen.Text = "Otwarty";
+            this.buttonOpen.Text = "Zamknięty";
             this.buttonOpen.UseVisualStyleBackColor = true;
             this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
             // 
             // textBoxInput
             // 
-            this.textBoxInput.Location = new System.Drawing.Point(60, 187);
+            this.textBoxInput.Location = new System.Drawing.Point(90, 288);
+            this.textBoxInput.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxInput.Name = "textBoxInput";
-            this.textBoxInput.Size = new System.Drawing.Size(441, 20);
+            this.textBoxInput.Size = new System.Drawing.Size(660, 26);
             this.textBoxInput.TabIndex = 30;
+            this.textBoxInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxInput_KeyPress);
             // 
             // buttonCommsType
             // 
-            this.buttonCommsType.Location = new System.Drawing.Point(426, 25);
+            this.buttonCommsType.Location = new System.Drawing.Point(639, 38);
+            this.buttonCommsType.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonCommsType.Name = "buttonCommsType";
-            this.buttonCommsType.Size = new System.Drawing.Size(75, 23);
+            this.buttonCommsType.Size = new System.Drawing.Size(112, 35);
             this.buttonCommsType.TabIndex = 31;
             this.buttonCommsType.Text = "RS232";
             this.buttonCommsType.UseVisualStyleBackColor = true;
@@ -137,9 +149,9 @@
             // 
             // Modem
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(556, 450);
+            this.ClientSize = new System.Drawing.Size(834, 692);
             this.Controls.Add(this.buttonCommsType);
             this.Controls.Add(this.textBoxInput);
             this.Controls.Add(this.buttonOpen);
@@ -151,6 +163,7 @@
             this.Controls.Add(this.comboBoxBaud);
             this.Controls.Add(this.comboBoxPort);
             this.Controls.Add(this.textBoxHistory);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Modem";
             this.Text = "Modem";
             this.Load += new System.EventHandler(this.Karta_Dzwiekowa_Load);

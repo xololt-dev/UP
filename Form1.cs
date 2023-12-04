@@ -7,16 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.IO;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Media;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-using System.Windows.Forms.VisualStyles;
-using System.Runtime.InteropServices.ComTypes;
-using System.Threading;
-using static System.Windows.Forms.CheckedListBox;
 using XModemProtocol;
 using System.IO.Ports;
 
@@ -28,6 +18,14 @@ namespace UP___Modem
     {
         SerialPort serialPort = new SerialPort();
         XModemCommunicator xmodem = new XModemCommunicator();
+
+        internal delegate void SerialDataReceivedEventHandlerDelegate(
+                 object sender, SerialDataReceivedEventArgs e);
+
+        delegate void SetTextCallback(string text);
+        string InputData = String.Empty;
+        string outputData = String.Empty;
+
         public Modem()
         {
             InitializeComponent();
@@ -35,6 +33,9 @@ namespace UP___Modem
 
         private void Karta_Dzwiekowa_Load(object sender, EventArgs e)
         {
+            serialPort.DataReceived +=
+              new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived_1);
+
             findPorts();
             addBaudValues();
             addDataBits();
@@ -63,7 +64,7 @@ namespace UP___Modem
             comboBoxBaud.Items.ToString();
 
             //get first item print in text
-            comboBoxBaud.Text = comboBoxBaud.Items[0].ToString();
+            comboBoxBaud.Text = comboBoxBaud.Items[4].ToString();
         }
 
         private void addHandshakeValues()
@@ -75,14 +76,14 @@ namespace UP___Modem
             comboBoxHandshake.Items.Add("RequestToSend");
             comboBoxHandshake.Items.Add("RequestToSendXOnXOff");
 
-            comboBoxHandshake.Text = comboBoxHandshake.Items[0].ToString();
+            comboBoxHandshake.Text = comboBoxHandshake.Items[1].ToString();
         }
 
         private void addDataBits()
         {
             comboBoxDataBits.Items.Clear();
 
-            if (buttonCommsType.Text == "RS232") 
+            if (buttonCommsType.Text == "RS232")
                 comboBoxDataBits.Items.Add(7);
             comboBoxDataBits.Items.Add(8);
 
@@ -115,7 +116,7 @@ namespace UP___Modem
 
         private void textBoxHistory_TextChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void buttonCommsType_Click(object sender, EventArgs e)
@@ -123,10 +124,12 @@ namespace UP___Modem
             if (buttonCommsType.Text == "RS232")
             {
                 buttonCommsType.Text = "XMODEM";
+                addDataBits();
             }
             else if (buttonCommsType.Text == "XMODEM")
             {
                 buttonCommsType.Text = "RS232";
+                addDataBits();
             }
         }
 
@@ -158,6 +161,8 @@ namespace UP___Modem
 
         private bool findPorts()
         {
+            comboBoxPort.Items.Clear();
+
             bool found = false;
             string[] ArrayComPortsNames = null;
 
@@ -173,11 +178,14 @@ namespace UP___Modem
                 do
                 {
                     index += 1;
-                    comboBoxPort.Text += ArrayComPortsNames[index] + "\n";
+                    comboBoxPort.Items.Add(ArrayComPortsNames[index]);
                 }
                 while (!((ArrayComPortsNames[index] == ComPortName) ||
                                 (index == ArrayComPortsNames.GetUpperBound(0))));
             }
+
+            if (found)
+                comboBoxPort.Text = comboBoxPort.Items[0].ToString();
 
             return found;
         }
@@ -195,6 +203,73 @@ namespace UP___Modem
             serialPort.Parity = (Parity)Enum.Parse(typeof(Parity), comboBoxParzystosc.Text);
 
             return true;
+        }
+
+        private void port_DataReceived_1(object sender, SerialDataReceivedEventArgs e)
+        {
+            InputData = serialPort.ReadExisting();
+            if (InputData != String.Empty)
+            {
+                this.BeginInvoke(new SetTextCallback(SetText), new object[] { InputData });
+            }
+        }
+
+        private void SetText(string text)
+        {
+            this.textBoxHistory.Text += text;
+        }
+
+        private void textBoxInput_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13) // enter key  
+            {
+                if (buttonCommsType.Text == "RS232")
+                {
+                    serialPort.Write(outputData);
+                    serialPort.Write("\r\n");
+                }
+                else if (buttonCommsType.Text == "XMODEM")
+                {
+                    xmodem.Data = Encoding.ASCII.GetBytes(outputData);
+                    xmodem.Completed += (s, d) => {
+                        Console.WriteLine($"Operation completed.\nPress enter to exit.");
+                    };
+                    xmodem.Aborted += (s, d) => {
+                        Console.WriteLine("Operation Aborted.\nPress enter to exit.");
+                    };
+
+                    xmodem.Send();
+
+                    if (xmodem.State != XModemStates.Idle)
+                    {
+                        xmodem.CancelOperation();
+                        InputData = Console.ReadLine();
+
+                        if (InputData != String.Empty)
+                        {
+                            this.BeginInvoke(new SetTextCallback(SetText), new object[] { InputData });
+                        }
+                    }
+                }
+                textBoxInput.Text = "";
+                outputData = string.Empty;
+            }
+            else if (e.KeyChar == (char)8)
+            {
+                if (textBoxInput.Text.Length != 0)
+                {
+                    outputData.Remove(outputData.Length - 1);
+                    textBoxInput.Text.Remove(textBoxInput.Text.Length - 1);
+                }
+            }
+            else if (e.KeyChar < 32 || e.KeyChar > 126)
+            {
+                e.Handled = true; // ignores anything else outside printable ASCII range
+            }
+            else
+            {
+                outputData += e.KeyChar.ToString();
+            }
         }
     }
 }
